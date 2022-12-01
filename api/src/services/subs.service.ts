@@ -22,6 +22,6 @@ export default class SubsService extends IPNSService {
     }
 
     public static async getSubs(): Promise<CID[]> {
-        return this.retrieveFile("k51qzi5uqu5dlgda8y39keszex17mzusqssbfsfb92h7losrcb40ud3fyfduu2"); // TODO add environment variable
+        return this.retrieveFile(process.env.SUBREDDIT_CID);
     }
 }
