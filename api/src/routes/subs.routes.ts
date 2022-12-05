@@ -12,21 +12,21 @@ router.post("/sub",
 
 router.get("/subs",
     [
-        //SubsController.list
+        SubsController.list
     ]
 );
 
 router.get("/sub/:cid",
     [
         subCidMiddleware,
-        //SubsController.get
+        SubsController.get
     ]
 );
 
 router.post("/sub/:cid/post",
     [
         subPostMiddleware,
-        //SubsController.addPost
+        SubsController.addPost
     ]
 );
 

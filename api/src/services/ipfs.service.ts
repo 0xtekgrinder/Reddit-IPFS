@@ -3,11 +3,11 @@ import { CID } from "../types/CID.js";
 
 export default class IPFSService {
     protected static async retrieveFile<ContentType>(cid: CID): Promise<ContentType> {
-        const res = await ipfs.get(cid);
+        const res = await ipfs.cat(cid);
         let content = [];
 
         for await (const chunk of res) {
-            content.push(chunk);
+            content = [...content, ...chunk];
         }
         const raw = Buffer.from(content).toString('utf8')
         const file = JSON.parse(raw);
