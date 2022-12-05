@@ -10,7 +10,7 @@ export default class IPNSService extends IPFSService{
         for await (const chunk of res) {
             content = [...content, ...chunk];
         }
-        const path = Buffer.from(content.flat()[0]).toString('utf8')
+        const path = Buffer.from(content.join("")).toString('utf8')
         return await IPFSService.retrieveFile<ContentType>(path);
     }
 
