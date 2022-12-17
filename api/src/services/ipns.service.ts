@@ -16,6 +16,8 @@ export default class IPNSService extends IPFSService{
 
     protected static async storeRecordFile(recordName: string, content: any): Promise<void> {
         const cid = await IPFSService.storeFile(content);
+
+        await ipfs.key.gen('/ipfs/' + recordName, {type: 'rsa', size: 2048});
         await ipfs.name.publish(cid, { key: recordName });
     }
 
