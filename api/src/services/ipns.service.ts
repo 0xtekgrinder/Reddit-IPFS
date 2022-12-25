@@ -14,11 +14,12 @@ export default class IPNSService extends IPFSService{
         return await IPFSService.retrieveFile<ContentType>(path);
     }
 
-    protected static async storeRecordFile(recordName: string, content: any): Promise<void> {
+    protected static async storeRecordFile(recordName: string, content: any): Promise<string> {
         const cid = await IPFSService.storeFile(content);
 
-        await ipfs.key.gen('/ipfs/' + recordName, {type: 'rsa', size: 2048});
-        await ipfs.name.publish(cid, { key: recordName });
+        await ipfs.key.gen(recordName, {type: 'rsa', size: 2048});
+        const published = await ipfs.name.publish('/ipfs/' + cid, { key: recordName });
+        return published.name;
     }
 
     protected static async appendToList(cidListRecordName: string, cidToAdd: CID): Promise<void> {

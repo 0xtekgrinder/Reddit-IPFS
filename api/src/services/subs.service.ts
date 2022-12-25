@@ -8,7 +8,8 @@ export default class SubsService extends IPNSService {
     }
 
     public static async store(recordName: string, comment: Sub): Promise<void> {
-        await this.storeRecordFile(recordName, comment);
+        const key = await this.storeRecordFile(recordName, comment);
+        await this.appendToList(key, process.env.SUBREDDIT_CID);
     }
 
     public static async addPost(recordName: string, postCID: CID): Promise<void> {
