@@ -6,7 +6,7 @@ export default class SubsController {
     public static async create(req: Request, res: Response): Promise<Response> {
         try {
             await SubsService.store(req.body.title, req.body);
-            return res.status(201);
+            return res.status(201).json({ message: "success" });
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
@@ -35,7 +35,7 @@ export default class SubsController {
             const sub = await SubsService.get(req.params.cid);
             await PostService.store(req.params.cid + '.' + req.body.title, req.body);
             await SubsService.addPost(req.params.cid, req.params.cid + '.' + req.body.title);
-            return res.status(201);
+            return res.status(201).json({ message: "success" });
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }

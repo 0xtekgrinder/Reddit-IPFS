@@ -8,7 +8,7 @@ export default class PostController {
             await PostService.get(req.params.cid);
             const cid = await CommentService.store(req.body);
             await PostService.addComment(req.params.cid, cid);
-            return res.status(201);
+            return res.status(201).json({ message: "success" });
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
@@ -17,7 +17,7 @@ export default class PostController {
     public static async get(req: Request, res: Response): Promise<Response> {
         try {
             const sub = await PostService.get(req.params.cid);
-            return res.json(sub);
+            return res.status(200).json(sub);
         } catch (error) {
             return res.status(500).json({ error: error.message });
         }
