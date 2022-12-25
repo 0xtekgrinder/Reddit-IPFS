@@ -11,7 +11,7 @@ export default class IPFSService {
         }
         const raw = Buffer.from(content).toString('utf8');
         const file = JSON.parse(raw);
-        return file as ContentType;
+        return file.data as ContentType;
     }
 
     protected static async storeFile(content: any): Promise<CID> {
