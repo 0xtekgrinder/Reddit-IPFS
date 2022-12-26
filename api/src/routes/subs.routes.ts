@@ -23,6 +23,13 @@ router.delete("/sub/:cid",
     ]
 );
 
+router.put("/sub",
+    [
+        subMiddleware,
+        SubsController.update
+    ]
+);
+
 router.get("/sub/:cid",
     [
         subCidMiddleware,
