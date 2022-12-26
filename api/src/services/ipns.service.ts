@@ -17,6 +17,7 @@ export default class IPNSService extends IPFSService{
     protected static async storeRecordFile(recordName: string, content: any, create: boolean = true): Promise<string> {
         const cid = await IPFSService.storeFile(content);
 
+        // TODO unpin the last CID
         if (create) await ipfs.key.gen(recordName, {type: 'rsa', size: 2048});
         const published = await ipfs.name.publish('/ipfs/' + cid, { key: recordName });
         return published.name;
@@ -26,5 +27,15 @@ export default class IPNSService extends IPFSService{
         const list = await this.retrieveFile<CID[]>(cidListRecordName);
         list.push(cidToAdd);
         await this.storeRecordFile(cidListRecordKey, list, createKey);
+    }
+
+    protected static async removeFromList(cidListRecordName: string, cidListRecordKey: string, cidToRemove: CID): Promise<void> {
+        const list = await this.retrieveFile<CID[]>(cidListRecordName);
+        for (let i = 0; i < list.length; i++){ 
+            if (list[i] === cidToRemove) { 
+                list.splice(i, 1); 
+            }
+        }
+        await this.storeRecordFile(cidListRecordKey, list, false);
     }
 }

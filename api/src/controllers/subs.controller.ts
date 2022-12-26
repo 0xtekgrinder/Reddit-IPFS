@@ -30,6 +30,15 @@ export default class SubsController {
         }
     }
 
+    public static async delete(req: Request, res: Response): Promise<Response> {
+        try {
+            await SubsService.delete(req.params.cid);
+            return res.status(201).json({ message: "success" });
+        } catch (error) {
+            return res.status(500).json({ error: error.message });
+        }
+    }
+
     public static async addPost(req: Request, res: Response): Promise<Response> {
         try {
             const sub = await SubsService.get(req.params.cid);

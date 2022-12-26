@@ -16,6 +16,13 @@ router.get("/subs",
     ]
 );
 
+router.delete("/sub/:cid",
+    [
+        subCidMiddleware,
+        SubsController.delete
+    ]
+);
+
 router.get("/sub/:cid",
     [
         subCidMiddleware,

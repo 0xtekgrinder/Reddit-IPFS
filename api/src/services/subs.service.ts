@@ -12,6 +12,10 @@ export default class SubsService extends IPNSService {
         await this.appendToList(process.env.SUBREDDIT_CID, process.env.SUBREDDIT_KEY, key, false);
     }
 
+    public static async delete(cidToRemove: CID): Promise<void> {
+        await this.removeFromList(process.env.SUBREDDIT_CID, process.env.SUBREDDIT_KEY, cidToRemove);
+    }
+
     public static async addPost(recordName: string, postCID: CID): Promise<void> {
         let post = await this.get(recordName);
         post.posts.push(postCID);
