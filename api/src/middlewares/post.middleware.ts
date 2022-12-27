@@ -16,7 +16,8 @@ export function postMiddleware(req: Request, res: Response, next: NextFunction) 
 
 export function postCommentMiddleware(req: Request, res: Response, next: NextFunction) {
     let valid = verifyArguments([
-        req.params.pid,
+        req.params.postCid,
+        req.params.subCid,
         req.body.content,
     ])
 

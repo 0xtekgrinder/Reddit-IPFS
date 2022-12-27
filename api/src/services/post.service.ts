@@ -12,9 +12,8 @@ export default class PostService extends IPNSService {
         return await this.storeRecordFile(recordName, comment);
     }
 
-    public static async addComment(recordName: string, commentCID: CID): Promise<void> {
-        let post = await this.get(recordName);
-        post.comments.push(commentCID);
-        await this.store(recordName, post);
+    public static async addComment(post: Post, commentToAdd: CID, key: string): Promise<void> {
+        post.comments.push(commentToAdd);
+        await this.storeRecordFile(key, post, false);
     }
 }

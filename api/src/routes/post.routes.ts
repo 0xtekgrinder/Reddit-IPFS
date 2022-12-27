@@ -10,10 +10,10 @@ router.get("/post/:cid",
     ]
 );
 
-router.post("/post/:cid/comment",
+router.post("/post/:subCid/comment/:postCid",
     [
         postCommentMiddleware,
-        PostController.comment
+        PostController.addComment
     ]
 );
 
