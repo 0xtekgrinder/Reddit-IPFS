@@ -1,0 +1,416 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Reddit-IPFS POC API",
+    "description": "Reddit-IPFS's API to benchmark retrieve time of reddit's like app built on IPFS",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Internal staging server for testing"
+    }
+  ],
+  "paths": {
+    "/sub": {
+      "post": {
+        "summary": "Create a new SubReddit.",
+        "description": "Create a new SubReddit and store it to the main IPNS record.",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubRedditCreationRequest"
+              },
+              "example": {
+                "title": "test subreddit",
+                "content": "Awesome subreddit to talk about this subject"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "CID of the newly created subreddit",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CID"
+                }
+              }
+            }
+          },
+          "209": {
+            "description": "A subreddit with this name already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/subs": {
+      "get": {
+        "summary": "Get a list of existing subreddits",
+        "description": "Get the id of each existing subreddit to call /sub/{CID} after",
+        "responses": {
+          "200": {
+            "description": "CIDs of all subreddits",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CIDList"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sub/{CID}": {
+      "get": {
+        "summary": "Get a SubReddit by CID.",
+        "parameters": [
+          {
+            "name": "CID",
+            "in": "path",
+            "description": "CID of the SubReddit",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "SubReddit with the given CID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubReddit"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "SubReddit not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/sub/{CID}/post": {
+      "post": {
+        "summary": "Get lastest SubReddits.",
+        "description": "Returns a list of the latest ${amount} posts of all the SubReddits.",
+        "parameters": [
+          {
+            "name": "CID",
+            "in": "path",
+            "description": "CID of the SubReddit to post to",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubRedditPostCreationRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "CID of the newly created post",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CID"
+                }
+              }
+            }
+          },
+          "209": {
+            "description": "A post with this title already exists",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/post/{CID}": {
+      "get": {
+        "summary": "Get a post by CID.",
+        "description": "Returns a list of the latest comments of a post.",
+        "parameters": [
+          {
+            "name": "CID",
+            "in": "path",
+            "description": "CID of the post",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Post with the given CID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubRedditPost"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "SubReddit not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/post/{CID}/comment": {
+      "post": {
+        "summary": "Create a new comment.",
+        "description": "Create a new comment and store it to a IPFS record.",
+        "parameters": [
+          {
+            "name": "CID",
+            "in": "path",
+            "description": "CID of the post linked to the comment",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/SubRedditComment"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "CID of the newly created comment",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CID"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/comment/{CID}": {
+      "get": {
+        "summary": "Create a new comment.",
+        "description": "Create a new comment and store it to a IPFS record.",
+        "parameters": [
+          {
+            "name": "CID",
+            "in": "path",
+            "description": "CID of the comment",
+            "required": true,
+            "style": "simple",
+            "explode": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Comment with the given CID",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SubReddit"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Comment not found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "SubRedditComment": {
+        "type": "object",
+        "properties": {
+          "content": {
+            "type": "string",
+            "description": "the content of the comment",
+            "example": "A comment"
+          }
+        }
+      },
+      "SubRedditPostCreationRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "the title of the post"
+          },
+          "content": {
+            "type": "string",
+            "description": "The post content"
+          }
+        }
+      },
+      "SubRedditPost": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "The title of the post",
+            "example": "Test title"
+          },
+          "content": {
+            "type": "string",
+            "description": "the full text content of the post"
+          },
+          "upvote": {
+            "type": "number",
+            "description": "The number of upvotes for the post"
+          },
+          "comments": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        }
+      },
+      "SubRedditCreationRequest": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "the title of the subreddit"
+          },
+          "content": {
+            "type": "string",
+            "description": "The short description of the subreddit"
+          }
+        }
+      },
+      "CID": {
+        "type": "object",
+        "properties": {
+          "CID": {
+            "type": "string",
+            "example": "Qmb2RyHNDJ27UAcgvPR31QhrXg9idbESQdG3ZtbndEiY6b"
+          }
+        }
+      },
+      "SubReddit": {
+        "type": "object",
+        "properties": {
+          "title": {
+            "type": "string",
+            "description": "the title of the subreddit"
+          },
+          "content": {
+            "type": "string",
+            "description": "The short description of the subreddit"
+          },
+          "posts": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "description": "CID of each post"
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "message": {
+            "type": "string",
+            "example": "An error occured"
+          }
+        }
+      },
+      "CIDList": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "example": "Qmb2RyHNDJ27UAcgvPR31QhrXg9idbESQdG3ZtbndEiY6b"
+        }
+      }
+    }
+  }
+}

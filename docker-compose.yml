@@ -1,0 +1,22 @@
+version: "3"
+
+services:
+  api:
+    build: api
+    ports:
+      - "3000:3000"
+    depends_on:
+      - ipfs
+
+  ipfs:
+      image: ipfs/kubo
+      ports:
+        - "4001:4001"
+        - "5001:5001"
+        - "8080:8080"
+        - "8081:8081"
+      volumes:
+        - ipfs_data:/data/ipfs
+
+volumes:
+    ipfs_data:
