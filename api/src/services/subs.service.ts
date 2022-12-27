@@ -21,10 +21,9 @@ export default class SubsService extends IPNSService {
         await this.storeRecordFile(recordName, comment);
     }
 
-    public static async addPost(recordName: string, postCID: CID): Promise<void> {
-        let post = await this.get(recordName);
-        post.posts.push(postCID);
-        await this.store(recordName, post);
+    public static async addPost(sub: Sub, postCID: CID): Promise<void> {
+        sub.posts.push(postCID);
+        await this.storeRecordFile(sub.title, sub, false);
     }
 
     public static async getSubs(): Promise<CID[]> {
