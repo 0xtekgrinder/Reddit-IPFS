@@ -51,8 +51,8 @@ export default class SubsController {
     public static async addPost(req: Request, res: Response): Promise<Response> {
         try {
             const sub = await SubsService.get(req.params.cid);
-            await PostService.store(req.params.cid + '.' + req.body.title, req.body);
-            await SubsService.addPost(req.params.cid, req.params.cid + '.' + req.body.title);
+            const name = await PostService.store(sub.title + '.' + req.body.title, req.body);
+            await SubsService.addPost(sub, name);
             return res.status(201).json({ message: "success" });
         } catch (error) {
             return res.status(500).json({ error: error.message });

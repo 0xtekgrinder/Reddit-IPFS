@@ -7,8 +7,9 @@ export default class PostService extends IPNSService {
         return this.retrieveFile<Post>(recordName);
     }
 
-    public static async store(recordName: string, comment: Post): Promise<void> {
-        await this.storeRecordFile(recordName, comment);
+    public static async store(recordName: string, comment: Post): Promise<string> {
+        comment.comments = [];
+        return await this.storeRecordFile(recordName, comment);
     }
 
     public static async addComment(recordName: string, commentCID: CID): Promise<void> {
