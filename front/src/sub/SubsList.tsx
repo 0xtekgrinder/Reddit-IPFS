@@ -1,15 +1,10 @@
 import Sub from "./Sub";
-import {Box, Center, Container, Divider, StackDivider, VStack} from "@chakra-ui/react";
-import SubDisplay from "./SubDisplay";
+import SubPreview from "./SubPreview";
+import PreviewList from "../reddit/PreviewList";
 
-export default function SubsList({ subs }: { subs: Sub[] }) {
-    return (
-        <Container maxW='container.lg' centerContent borderWidth={1} borderRadius={15} borderColor={'gray.200'} padding={4}>
-                <VStack width={'container.md'} divider={<StackDivider borderColor='gray.200' />}>
-                    {subs.map((sub: Sub) => (
-                        <SubDisplay sub={sub} />
-                    ))}
-                </VStack>
-        </Container>
-    );
+export default function SubsList({ subs, onSelect }: { subs: Sub[], onSelect: (sub: Sub) => void }) {
+    return PreviewList<Sub>({
+        elems: subs,
+        elemFct: elem => <SubPreview sub={elem} onSelect={onSelect}/>
+    });
 }

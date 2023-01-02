@@ -1,47 +1,55 @@
-import {CSSProperties, useState} from "react";
-import {Spinner, VStack} from "@chakra-ui/react";
 import Sub from "../sub/Sub";
 import SubsList from "../sub/SubsList";
+import Loader from "./Loader";
+import {useState} from "react";
+import SubDisplay from "../sub/SubDisplay";
+import Post from "../post/Post";
+import PostDisplay from "../post/PostDisplay";
 
-
-
-function loadSubs(clbk: (subs: Sub[]) => void) {
-  setTimeout(() => {
-    clbk([
-      {
-        name: "r/programming",
-        description: "A subreddit for all things programming"
-      },
-      {
-        name: "r/programminghorror",
-        description: "A subreddit for all things programming"
-      },
-      {
-        name: "r/programmingcirclejerk",
-        description: "A subreddit for all things programming"
-      },
-    ]);
-  }, 4000 + Math.random() * 3000);
+function loadSubs(): Promise<Sub[]> {
+    return new Promise((resolve, reject) => {
+        setTimeout(() => {
+            resolve([
+                {
+                    name: "r/programming",
+                    description: "A subreddit for all things programming",
+                    posts: [
+                        "1",
+                        "2",
+                        "3",
+                    ]
+                },
+                {
+                    name: "r/programminghorror",
+                    description: "A subreddit for all things programming",
+                    posts: [
+                        "1",
+                        "2",
+                        "3",
+                    ]
+                },
+                {
+                    name: "r/programmingcirclejerk",
+                    description: "A subreddit for all things programming",
+                    posts: [
+                        "1",
+                        "2",
+                        "3",
+                    ]
+                },
+            ]);
+        }, 4000 + Math.random() * 3000);
+    });
 }
 
 export default function Home() {
-    const [loading, setLoading] = useState(true);
-    const [subs, setSubs] = useState<Sub[]>([]);
+    const [sub, setSub] = useState<Sub>();
+    const [post, setPost] = useState<Post>();
 
-    if (loading) {
-        loadSubs((subs) => {
-            setSubs(subs);
-            setLoading(false);
-        });
-        const style: CSSProperties = { position: "fixed", top: "50%", left: "50%", transform: "translate(-50%, -50%)" };
-        return <Spinner
-            style={style}
-            thickness='4px'
-            speed='0.65s'
-            emptyColor='gray.200'
-            color='blue.500'
-            size='xl'
-        />
-    } else
-        return <SubsList subs={subs} />;
+    if (post)
+        return <PostDisplay post={post} onReturn={() => setPost(undefined)}/>;
+    else if (sub)
+        return <SubDisplay sub={sub} onSelect={setPost} onReturn={() => setSub(undefined)}/>
+    else
+        return <Loader actionFct={loadSubs} displayFct={(subs) => <SubsList subs={subs} onSelect={setSub}/>}/>;
 }
