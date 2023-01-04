@@ -50,3 +50,19 @@ Or you can simply use the docker-compose by this command:
 - __`IPFS_API`__      Define the __URL__ of the IPFS __Node__ used
 - __`REDDIT_KEY`__      Define the __IPFS KEY__ of the __Reddit__
 - __`REDDIT_CID`__      Define the __IPFS CID__ of the __Reddit__
+
+## Scripts
+
+### Get started
+
+To install this project, you're going to need the api running
+
+You need to execute the command bellow inside scripts directory
+
+  yarn install
+
+And then you can launch the script that you wants by using the command bellow inside the scripts directory:
+
+  yarn subs
+  yarn posts
+  yarn comments
