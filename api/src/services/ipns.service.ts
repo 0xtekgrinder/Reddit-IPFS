@@ -24,7 +24,9 @@ export default class IPNSService extends IPFSService{
     }
 
     protected static async appendToList(cidListRecordName: string, cidListRecordKey: string, cidToAdd: CID, createKey: boolean = true): Promise<void> {
-        const list = await this.retrieveFile<CID[]>(cidListRecordName);
+        let list = await this.retrieveFile<CID[]>(cidListRecordName);
+        if (list === undefined)
+            list = [];
         list.push(cidToAdd);
         await this.storeRecordFile(cidListRecordKey, list, createKey);
     }
