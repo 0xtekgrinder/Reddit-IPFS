@@ -13,12 +13,12 @@ export default class SubsService extends IPNSService {
         const key = await this.storeRecordFile(recordName, comment);
 
         // Append to the global list of subs the new sub
-        await this.appendToList(process.env.SUBREDDIT_CID, process.env.SUBREDDIT_KEY, key, false);
+        await this.appendToList(process.env.REDDIT_CID, process.env.REDDIT_KEY, key, false);
     }
 
     public static async delete(cidToRemove: CID): Promise<void> {
         // Delete from the global list of subs the sub
-        await this.removeFromList(process.env.SUBREDDIT_CID, process.env.SUBREDDIT_KEY, cidToRemove);
+        await this.removeFromList(process.env.REDDIT_CID, process.env.REDDIT_KEY, cidToRemove);
     }
 
     public static async update(recordName: string, comment: Sub): Promise<void> {
@@ -31,6 +31,6 @@ export default class SubsService extends IPNSService {
     }
 
     public static async getSubs(): Promise<CID[]> {
-        return this.retrieveFile(process.env.SUBREDDIT_CID);
+        return this.retrieveFile(process.env.REDDIT_CID);
     }
 }
