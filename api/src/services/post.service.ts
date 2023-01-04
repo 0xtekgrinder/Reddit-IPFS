@@ -8,6 +8,7 @@ export default class PostService extends IPNSService {
     }
 
     public static async store(recordName: string, comment: Post): Promise<string> {
+        // Set comments to empty when creating a new post
         comment.comments = [];
         return await this.storeRecordFile(recordName, comment);
     }

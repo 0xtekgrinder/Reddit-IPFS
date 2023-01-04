@@ -6,9 +6,14 @@ import { Request, Response } from "express";
 export default class PostController {
     public static async addComment(req: Request, res: Response): Promise<Response> {
         try {
+            // Get the sub and the post
             const sub = await SubsService.get(req.params.subCid);
             const post = await PostService.get(req.params.postCid);
+
+            // Create the new comment
             const name = await CommentService.store(req.body);
+
+            // Add the comment to the comments list inside the post
             await PostService.addComment(post, name, sub.title + '.' + post.title);
             return res.status(201).json({ message: "success" });
         } catch (error) {
