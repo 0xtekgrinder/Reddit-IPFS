@@ -8,12 +8,16 @@ export default class SubsService extends IPNSService {
     }
 
     public static async store(recordName: string, comment: Sub): Promise<void> {
+        // Set posts to empty when creating a new sub
         comment.posts = [];
         const key = await this.storeRecordFile(recordName, comment);
+
+        // Append to the global list of subs the new sub
         await this.appendToList(process.env.SUBREDDIT_CID, process.env.SUBREDDIT_KEY, key, false);
     }
 
     public static async delete(cidToRemove: CID): Promise<void> {
+        // Delete from the global list of subs the sub
         await this.removeFromList(process.env.SUBREDDIT_CID, process.env.SUBREDDIT_KEY, cidToRemove);
     }
 
