@@ -69,4 +69,5 @@ And then you can launch the script that you wants by using the command bellow in
 
 ## Authors
 
-| [<img src="https://github.com/adrienfort.png?size=85" width=85><br><sub>0xtekgrinder</sub>](https://github.com/0xtekgrinder) | [<img src="https://github.com/rojas-diego.png?size=85" width=85><br><sub>0xMemoryGrinder</sub>](https://github.com/0xMemoryGrinder)
+| [<img src="https://github.com/0xtekgrinder.png?size=85" width=85><br><sub>0xtekgrinder</sub>](https://github.com/0xtekgrinder) | [<img src="https://github.com/0xMemoryGrinder.png?size=85" width=85><br><sub>0xMemoryGrinder</sub>](https://github.com/0xMemoryGrinder)
+| :---: | :---: |
