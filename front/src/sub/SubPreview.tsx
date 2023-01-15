@@ -9,10 +9,10 @@ export default function SubPreview({ sub, onSelect }: { sub: Sub, onSelect: (sub
             _hover={{ bg: 'gray.400' }}
         >
             <CardHeader>
-                {sub.name}
+                {sub.title}
             </CardHeader>
             <CardBody>
-                {sub.description.slice(0, 20)}
+                {sub.content.slice(0, 20)}
             </CardBody>
         </Card>
     );

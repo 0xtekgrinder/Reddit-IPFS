@@ -1,6 +1,6 @@
 export default interface Sub {
-    name: string;
-    description: string;
+    title: string;
+    content: string;
 
     posts: string[];
 }

@@ -3,22 +3,25 @@ import {Button, Card, CardBody, CardHeader, Container, Divider} from "@chakra-ui
 import Loader from "../reddit/Loader";
 import Post from "../post/Post";
 import CommentsList from "../comment/CommentsList";
+import axios from "axios";
 
-function loadComments(post: Post) : Promise<Comment[]>{
+function loadComments({post, gateway}: {post: Post, gateway : string}) : Promise<Comment[]>{
     //create a promise that resolves after 2 seconds for each post and gather them in an array
     return Promise.all(post.comments.map((comment) =>
-        new Promise((resolve: (com: Comment) => void) =>
-            setTimeout(() => {
+        new Promise(async (resolve: (com: Comment) => void) => {
+            const data = await axios.get(gateway + `/ipfs/${comment}`);
+            resolve(data.data.data);
+            /*setTimeout(() => {
                 let ret : Comment = {
                     content: `This is the content of comment ${comment}`,
                 }
                 resolve(ret)
-            }, 2000 + Math.random() * 3000)
-        )
+            }, 2000 + Math.random() * 3000)*/
+        })
     ));
 }
 
-export default function PostDisplay({ post, onReturn }: { post: Post, onReturn: () => void }) {
+export default function PostDisplay({ post, gateway, onReturn }: { post: Post, gateway: string, onReturn: () => void }) {
     return (
         <Container maxW='container.lg' centerContent padding={4}>
             <Button marginY={4} onClick={() => onReturn()}>Back</Button>
@@ -34,7 +37,7 @@ export default function PostDisplay({ post, onReturn }: { post: Post, onReturn: 
                 </CardBody>
             </Card>
             <Divider my={4} maxW={'container.lg'}/>
-            <Loader actionFct={loadComments} displayFct={(comments) => <CommentsList comments={comments} />} actionFctArgs={post}/>
+            <Loader actionFct={loadComments} displayFct={(comments) => <CommentsList comments={comments} />} actionFctArgs={{post: post, gateway: gateway}}/>
         </Container>
     );
 }

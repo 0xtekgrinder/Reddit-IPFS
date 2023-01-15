@@ -20,6 +20,8 @@ export default function Loader<T>({actionFct, displayFct, actionFctArgs} : {acti
             color='blue.500'
             size='xl'
         />
-    } else
+    } else {
+        console.log(data);
         return displayFct(data as T);
+    }
 }
